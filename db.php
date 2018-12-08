@@ -177,6 +177,61 @@ $pds = $pdo->prepare($sql);
 	}
 
 	//shopm
+	function sellItem($item_id, $item_qty, $exch_rate, $rem_stock){
+
+		$pdo = $this->pdo;
+		$data = array();//$item_id, $item_qty, $exch_rate);
+
+		$sell_invoice_uid = time();
+
+		$sql = "INSERT INTO 
+		`sells` (`sell_id`, `sell_invoice_uid`, `sell_item_id`, `sell_qty`, `sell_exch_rate`,`sell_remaining_stock`, `sell_date`) 
+		VALUES (NULL, '$sell_invoice_uid', '$item_id', '$item_qty', '$exch_rate', '$rem_stock', CURRENT_TIMESTAMP) ";
+
+		//echo $sql;
+
+		$pds = $pdo->prepare($sql);
+		if( $pds->execute($data)){
+
+
+			$lid = $pdo->lastInsertId();
+
+			$sql = "UPDATE `items` SET `item_stock_count` = '$rem_stock' WHERE `items`.`item_id` = " . $item_id;
+			$pds = $pdo->prepare($sql);
+			$pds->execute($data);
+
+
+
+			return $this->loadItemByProp("item_id", $item_id);//$lid;
+		}else{
+			return false;
+		}
+
+
+
+	}
+
+	//shopm
+	function loadItemByProp($kPropName, $propVal){
+
+		$pdo = $this->pdo;
+		$data = array();
+		$sql = "SELECT * FROM items WHERE $kPropName='$propVal' order by item_added_date desc ";
+ 
+		//echo $sql;
+
+		$pds = $pdo->prepare($sql);
+		$pds->execute($data);
+		
+		$res = $pds->fetchAll(PDO::FETCH_ASSOC);	
+
+		
+
+		return $res[0];
+
+	}
+
+	//shopm
 	function loadItem($item_unique_name){
 
 		$pdo = $this->pdo;
@@ -207,7 +262,7 @@ $hash = hash_hmac('sha256', $time, $key);
 return $hash;
 	}
 
-	//shopm
+	//shopm other
 	function addSell($sell_item_id){
 
 		$pdo = $this->pdo;

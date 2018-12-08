@@ -62,6 +62,18 @@ if(isset($_REQUEST['act'])){
 
 	}
 
+	//shopm
+	if($act == 'sellItem'){
+
+		$item_id= $_REQUEST['item_id'];
+		$item_qty= $_REQUEST['item_qty'];
+		$exch_rate=$_REQUEST['exch_rate'];
+		$rem_stock = $_REQUEST['rem_stock'];
+
+		echo json_encode($db->sellItem($item_id, $item_qty, $exch_rate, $rem_stock));
+
+	}
+
 	if($act == 'updViewsCount'){
 
 		
