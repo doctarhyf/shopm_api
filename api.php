@@ -42,7 +42,7 @@ if(isset($_REQUEST['act'])){
 		$item_stock_count = $_REQUEST['item_stock_count'];
 
 
-		echo $db->addItem($item_name, $item_desc, $item_price, $item_unique_name, $item_stock_count);
+		echo $db->addItemToStock($item_name, $item_desc, $item_price, $item_unique_name, $item_stock_count);
 
 	}
 
