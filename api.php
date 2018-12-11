@@ -362,9 +362,9 @@ if(isset($_REQUEST['act'])){
 
 	}
 
-	if($act == 'updItem'){
+	/*if($act == 'updItem'){
 
-		$date = date('Ymdhis');
+		
 		//$itemUniqueName = rand(1000000000, 2000000000) . '_' . $date;  
 		//$un = $itemUniqueName;
 		
@@ -408,7 +408,7 @@ if(isset($_REQUEST['act'])){
 		}
 		
 		
-	}
+	}*/
 	
 	if($act == 'loadAllFeaturedProducts'){
 
@@ -826,17 +826,29 @@ if(isset($_REQUEST['act'])){
 
 	}
 
-	if($act == 'removeItemFromWishlist'){
-		$uid = $_REQUEST['uid'];
-		$wid = $_REQUEST['wid'];
+	//shopm
+	if($act == 'delItem'){
+		$item_id = $_REQUEST['item_id'];
 
-		$res = $db->removeItemFromWishlist($uid, $wid);
+		$res = $db->delItem($item_id);
 
 		if($res === false){
 			echo 'false';
 		}else{
 			echo 'true';
 		}
+	}
+
+	//shopm
+	if($act == 'updItem'){
+
+		$item_id = $_REQUEST['item_id'];
+		$item_name = $_REQUEST['item_name'];
+		$item_price = $_REQUEST['item_price'];
+		$item_stock_count = $_REQUEST['item_stock_count']; 
+		$item_desc = $_REQUEST['item_desc'];
+
+		echo json_encode($db->updItem($item_id, $item_name,$item_price,$item_stock_count, $item_desc));
 	}
 
 

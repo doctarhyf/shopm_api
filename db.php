@@ -378,11 +378,12 @@ if( $pds->execute($data)){
 		
 	}
 
-	function removeItemFromWishlist($uid, $wid){
+	//shopm
+	function delItem($item_id){
 		$pdo = $this->pdo;
 		$data = array();
 
-		$sql = 'DELETE FROM `wishlist` WHERE `wishlist`.`wl_uid` = ' . $uid . ' AND wl_item_id = ' . $wid;
+		$sql = 'DELETE FROM `items` WHERE `items`.`item_id` = ' . $item_id;
 
 		$pds = $pdo->prepare($sql);
 		//echo $sql;
@@ -393,7 +394,7 @@ if( $pds->execute($data)){
 			return true;
 		
 		}else{
-		return false;
+			return false;
 		}
 		
 	}
@@ -892,28 +893,21 @@ $pds = $pdo->prepare($sql);
 
 		}
 
-	function updItem($itemId, $un, $itemName, $itemPrice, $itemCur, $itemPriceToDiscuss,
-			$itemDesc, $itemCat, $itemType, $ownerId, 
-			$mainPic, $pic1, $pic2, $pic3, $itemQual){
+		//shopm
+	function updItem($item_id, $item_name,$item_price,$item_stock_count, $item_desc){
 
 		$pdo = $this->pdo;
 
+		$data = array();//$item_name,$item_price,$item_stock_count, $item_desc,$item_id);
 
-		if($itemPriceToDiscuss == '1'){
-			$itemPrice = '-1';
-		}
-		
-		$itemType = $this->getItemTypeIdByNameAndCatName($itemType, $itemCat);
+		/*$sql = " UPDATE items SET item_name='?', 
+		item_price='?', item_stock_count='?', item_desc='?' where item_id = '?' ";*/
 
+		$sql = " UPDATE items SET item_name='$item_name', 
+		item_price='$item_price', item_stock_count='$item_stock_count', item_desc='$item_desc', item_last_stock_upd=CURRENT_TIMESTAMP
+		where item_id = '$item_id'  ";
 
-		$itemCat = $this->getIDFromTableByName('it_cats', $itemCat, 'it_cat_id', 'it_cat_name');
-		$itemQual = $this->getIDFromTableByName('it_quals', $itemQual, 'it_qual_prior', 'it_qual_name');
-
-
-		$data = array($itemName,$itemPrice, $itemCur, $itemPriceToDiscuss,
-			$itemDesc, $itemCat, $itemType, $itemQual, $ownerId, $itemId);
-
-		$sql = " UPDATE items SET pdName=?, pdPrice=?, pdCur=?, pdPriceToDiscuss=?, pdDesc=?, pdCat=?, pdType=?, pdQual=? where (pdOwnerId=? AND item_id=?) ";
+		echo $sql;
 
 
 		//printq($sql,$data);
@@ -921,7 +915,13 @@ $pds = $pdo->prepare($sql);
 		$pds = $pdo->prepare($sql);
 
 
-		return $pds->execute($data);
+		if( $pds->execute($data)){
+
+			return 'true';
+
+		}else{
+			return 'false';
+		}
 		/*if($pds->execute($data)){
 
 			$fh = fopen('img/' . IMG_FOLDER_PRODUCTS . '/' . $un . '_main.jpg' , 'w');
