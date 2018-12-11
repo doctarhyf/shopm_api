@@ -177,6 +177,41 @@ $pds = $pdo->prepare($sql);
 	}
 
 	//shopm
+	/*function addItemToStock($item_name,$item_price,$item_stock_count,$item_desc){
+
+		$pdo = $this->pdo;
+		$data = array();//$item_id, $item_qty, $exch_rate);
+
+		//$sell_invoice_uid = time();
+
+		$sql = "INSERT INTO 
+		`sells` (`sell_id`, `sell_invoice_uid`, `sell_item_id`, `sell_qty`, `sell_exch_rate`,`sell_remaining_stock`, `sell_date`) 
+		VALUES (NULL, '$sell_invoice_uid', '$item_id', '$item_qty', '$exch_rate', '$rem_stock', CURRENT_TIMESTAMP) ";
+
+		//echo $sql;
+
+		$pds = $pdo->prepare($sql);
+		if( $pds->execute($data)){
+
+
+			$lid = $pdo->lastInsertId();
+
+			$sql = "UPDATE `items` SET `item_stock_count` = '$rem_stock' WHERE `items`.`item_id` = " . $item_id;
+			$pds = $pdo->prepare($sql);
+			$pds->execute($data);
+
+
+
+			return $this->loadItemByProp("item_id", $item_id);//$lid;
+		}else{
+			return false;
+		}
+
+
+
+	}*/
+
+	//shopm
 	function sellItem($item_id, $item_qty, $exch_rate, $rem_stock){
 
 		$pdo = $this->pdo;
@@ -236,8 +271,7 @@ $pds = $pdo->prepare($sql);
 
 		$pdo = $this->pdo;
 		$data = array();
-		$sql = "SELECT * FROM items WHERE item_unique_name='$item_unique_name'
-order by item_added_date desc";
+		$sql = "SELECT * FROM items WHERE item_unique_name='$item_unique_name' order by item_added_date desc";
  
 		//echo $sql;
 
@@ -256,10 +290,10 @@ order by item_added_date desc";
 	//shopm
 	function getRandomHash(){
 		$key = SECRET_KEY;
-$time = time();
-$hash = hash_hmac('sha256', $time, $key);
+		$time = time();
+		$hash = hash_hmac('sha256', $time, $key);
 
-return $hash;
+		return $hash;
 	}
 
 	//shopm other
@@ -287,7 +321,7 @@ if( $pds->execute($data)){
 	}
 
 	//shopm
-	function addItem($item_name, $item_desc, $item_price, $item_unique_name, $item_stock_count){
+	function addItemToStock($item_name, $item_desc, $item_price, $item_unique_name, $item_stock_count){
 		$pdo = $this->pdo;
 		$data = array($item_name, $item_desc, $item_price, $item_unique_name, $item_stock_count);
 

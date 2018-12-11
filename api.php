@@ -32,7 +32,7 @@ if(isset($_REQUEST['act'])){
 	}
 
 	//shopm
-	if($act == 'addItem'){
+	if($act == 'addItemToStock'){
 
 
 		$item_name = $_REQUEST['item_name'];
