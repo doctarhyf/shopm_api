@@ -4,6 +4,7 @@ define('DB_HOST', 'localhost');
 
 //OTHER
 define('SECRET_KEY', 'SHOPM');
+define('DIR_QR_ITEMS','qritems');
 
 //define items cats
 define('ROOT_FOLDER_SOSACHAT', 'sosachat');

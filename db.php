@@ -7,6 +7,7 @@ $home = 'http://localhost/shopm/';
 
 
 require_once('helper_funcs.php');
+include("phpqrcode/qrlib.php");
 
 try {
 
@@ -353,6 +354,12 @@ if( $pds->execute($data)){
 
 $pds = $pdo->prepare($sql);
 if( $pds->execute($data)){
+
+	//gen qr
+	if(!file_exists(DIR_QR_ITEMS)){
+		mkdir(DIR_QR_ITEMS, 0777, true);
+	}
+	QRcode::png($item_unique_name, DIR_QR_ITEMS . "/" . $item_name . "_" . $item_unique_name . ".png", QR_ECLEVEL_L, 10);
 	return $pdo->lastInsertId();
 }else{
 	return false;
