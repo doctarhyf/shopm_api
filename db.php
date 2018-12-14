@@ -212,7 +212,7 @@ $pds = $pdo->prepare($sql);
 	}*/
 
 	//shopm
-	function sellItem($item_id, $item_qty, $exch_rate, $rem_stock){
+	function sellItem($item_id, $item_qty, $exch_rate, $rem_stock, $item_cur_price){
 
 		$pdo = $this->pdo;
 		$data = array();//$item_id, $item_qty, $exch_rate);
@@ -220,8 +220,8 @@ $pds = $pdo->prepare($sql);
 		$sell_invoice_uid = time();
 
 		$sql = "INSERT INTO 
-		`sells` (`sell_id`, `sell_invoice_uid`, `sell_item_id`, `sell_qty`, `sell_exch_rate`,`sell_remaining_stock`, `sell_date`) 
-		VALUES (NULL, '$sell_invoice_uid', '$item_id', '$item_qty', '$exch_rate', '$rem_stock', CURRENT_TIMESTAMP) ";
+		`sells` (`sell_id`, `sell_invoice_uid`, `sell_item_id`, `sell_qty`, `sell_exch_rate`,`sell_remaining_stock`, `sell_date`, `sell_item_cur_price`) 
+		VALUES (NULL, '$sell_invoice_uid', '$item_id', '$item_qty', '$exch_rate', '$rem_stock', CURRENT_TIMESTAMP, $item_cur_price) ";
 
 		//echo $sql;
 
