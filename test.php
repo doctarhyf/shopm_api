@@ -1,8 +1,16 @@
 <?php
 
-include("phpqrcode/qrlib.php");
+for($i = 0; $i < 67; $i++){
+
+    $zero = "";
+    if($i < 10) { $zero = "0"; }
+
+    echo "&lt;item 
+                android:duration=\"100\"
+                android:drawable=\"@drawable/scanner_$zero$i\"/&gt;<br/>";
+
+}
 
 
-QRcode::png("ip_192.168.1.2", "QRTEST.jpg", QR_ECLEVEL_L, 10);
 
 ?>
