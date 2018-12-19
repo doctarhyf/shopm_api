@@ -32,6 +32,24 @@ if(isset($_REQUEST['act'])){
 	}
 
 	//shopm
+	if($act == 'getItemDaillySells'){
+		$d = $_REQUEST["d"];
+		$m = $_REQUEST["m"];
+		$y = $_REQUEST["y"];
+
+		echo json_encode($db->getItemDaillySells($y, $m, $d));
+	}
+
+	//shopm
+	if($act == 'getItemMonthlySells'){
+		
+		$m = $_REQUEST["m"];
+		$y = $_REQUEST["y"];
+
+		echo json_encode($db->getItemMonthlySells($y, $m));
+	}
+
+	//shopm
 	if($act == 'addItemToStock'){
 
 

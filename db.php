@@ -322,6 +322,54 @@ if( $pds->execute($data)){
 	}
 
 	//shopm
+	function getItemDaillySells($y, $m, $d){
+		$pdo = $this->pdo;
+		$data = array();
+
+
+		$sql = "SELECT 
+		i.item_name,
+		s.sell_qty, 
+		s.sell_item_cur_price,
+		s.sell_date FROM items i, sells s
+		WHERE i.item_id = s.sell_item_id AND 
+		sell_date >= '" . 
+		$y . "-" . $m . "-" . $d . " 00:00:00' AND sell_date < '" . $y . "-" . $m . "-" . ($d+1) . " 00:00:00' 
+		ORDER BY s.sell_date DESC ";
+		
+		$pds = $pdo->prepare($sql);
+		$pds->execute($data);
+		
+		$res = $pds->fetchAll(PDO::FETCH_ASSOC);	
+
+		return $res;
+
+	}
+
+	//shopm
+	function getItemMonthlySells($y, $m){
+		$pdo = $this->pdo;
+		$data = array($m,$y);
+
+
+		$sql = "SELECT 
+		i.item_name,
+		s.sell_qty, 
+		s.sell_item_cur_price,
+		s.sell_date FROM items i, sells s
+		WHERE i.item_id = s.sell_item_id AND 
+		MONTH(sell_date) = ? AND YEAR(sell_date) = ?
+		ORDER BY s.sell_date DESC ";
+		
+		$pds = $pdo->prepare($sql);
+		$pds->execute($data);
+		
+		$res = $pds->fetchAll(PDO::FETCH_ASSOC);	
+
+		return $res;
+	}
+
+	//shopm
 	function addItemToStock($item_name, $item_desc, $item_price, $item_unique_name, $item_stock_count){
 		$pdo = $this->pdo;
 		$data = array($item_name, $item_desc, $item_price, $item_unique_name, $item_stock_count);
