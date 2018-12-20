@@ -37,7 +37,18 @@ if(isset($_REQUEST['act'])){
 		$m = $_REQUEST["m"];
 		$y = $_REQUEST["y"];
 
-		echo json_encode($db->getItemDaillySells($y, $m, $d));
+		$res = $db->getItemDaillySells($y, $m, $d);
+
+		$totQty = 0;
+		$totCash = 0;
+		foreach($res as $sellItem){
+			$totQty += $sellItem['sell_qty'];
+			$totCash += $sellItem['sell_item_cur_price'] * $sellItem['sell_qty'];
+		}
+
+		$res[] = array("tot_qty" => $totQty, "tot_cash" => $totCash);
+
+		echo json_encode($res);
 	}
 
 	//shopm
@@ -46,7 +57,20 @@ if(isset($_REQUEST['act'])){
 		$m = $_REQUEST["m"];
 		$y = $_REQUEST["y"];
 
-		echo json_encode($db->getItemMonthlySells($y, $m));
+		//echo json_encode($db->getItemMonthlySells($y, $m));
+
+		$res = $db->getItemMonthlySells($y, $m);
+
+		$totQty = 0;
+		$totCash = 0;
+		foreach($res as $sellItem){
+			$totQty += $sellItem['sell_qty'];
+			$totCash += $sellItem['sell_item_cur_price'] * $sellItem['sell_qty'];
+		}
+
+		$res[] = array("tot_qty" => $totQty, "tot_cash" => $totCash);
+
+		echo json_encode($res);
 	}
 
 	//shopm
