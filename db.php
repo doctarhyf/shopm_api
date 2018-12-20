@@ -327,16 +327,20 @@ if( $pds->execute($data)){
 		$data = array();
 
 
-		$sql = "SELECT 
+		$sql = "SELECT
 		i.item_name,
-		s.sell_qty, 
-		s.sell_item_cur_price,
-		s.sell_date FROM items i, sells s
+		sum(s.sell_qty) as sell_qty, 
+		sell_item_cur_price,
+		s.sell_date 
+		FROM items i, sells s
 		WHERE i.item_id = s.sell_item_id AND 
 		sell_date >= '" . 
 		$y . "-" . $m . "-" . $d . " 00:00:00' AND sell_date < '" . $y . "-" . $m . "-" . ($d+1) . " 00:00:00' 
+		GROUP BY i.item_name
 		ORDER BY s.sell_date DESC ";
 		
+		//echo $sql;
+
 		$pds = $pdo->prepare($sql);
 		$pds->execute($data);
 		
@@ -354,11 +358,12 @@ if( $pds->execute($data)){
 
 		$sql = "SELECT 
 		i.item_name,
-		s.sell_qty, 
+		sum(s.sell_qty) as sell_qty, 
 		s.sell_item_cur_price,
 		s.sell_date FROM items i, sells s
 		WHERE i.item_id = s.sell_item_id AND 
 		MONTH(sell_date) = ? AND YEAR(sell_date) = ?
+		GROUP BY i.item_name
 		ORDER BY s.sell_date DESC ";
 		
 		$pds = $pdo->prepare($sql);
