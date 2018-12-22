@@ -5,6 +5,7 @@
 require_once('helper_funcs.php');
 require_once("defs.php");
 require_once("db.php");
+require_once("pdf_renderer.php");
 
 
 
@@ -49,6 +50,73 @@ if(isset($_REQUEST['act'])){
 		$res[] = array("tot_qty" => $totQty, "tot_cash" => $totCash);
 
 		echo json_encode($res);
+	}
+
+	if($act == 'genSellsPDFRepport'){
+
+		$itemSellsData;
+		$header = array("Article", "Qte", "PU", "PT");
+		$sellsType = $_REQUEST['sellsType'];
+		$title;
+		$date;
+		$isMonthly = false;
+	
+
+		if($sellsType == PDF_REPPORT_SELLS_TYPE_DAILLY){
+			
+			$d = $_REQUEST["d"];
+			$m = $_REQUEST["m"];
+			$y = $_REQUEST["y"];
+
+			$itemSellsData = $db->getItemDaillySells($y, $m, $d);
+			$title = "Rapport Journalier";
+			$date = $d . '/' . $m . '/' . $y;
+
+		}else if($sellsType == PDF_REPPORT_SELLS_TYPE_MONTHLY){
+
+			
+			$m = $_REQUEST["m"];
+			$y = $_REQUEST["y"];
+
+			$itemSellsData = $db->getItemMonthlySells($y, $m);
+			$title = "Rapport Mentuel";
+			$date =  $m . '/' . $y;
+			$isMonthly = true;
+
+		}
+
+		$i = 0;
+		$tableData = array();
+		$totItems = 0;
+		$totCash = 0;
+
+		foreach($itemSellsData as $itemSells ){
+			$rec = join(";", $itemSells);
+			$recArr = explode(';', $rec);
+			//array_unshift($recArr, ($i + 1));
+			array_pop($recArr);
+			$recArr[0] = ($i + 1) . ". " . $recArr[0];
+			$tableData[] = $recArr;
+			$totItems += $recArr[1];
+			$totCash += $recArr[3];
+			$i++;
+			//print_r($recArr);
+			
+		}
+
+
+		if(!file_exists(DIR_REPPORTS)){
+			mkdir(DIR_REPPORTS, 0777, true);
+		}
+		$pdf = new PDF();
+		$pdf->SetFont('Arial','',14);
+		$pdf->AddPage();
+		$pdf->RepportTable($title, $date, $totItems, $totCash, $header,$tableData, $isMonthly);
+		$pdf->Output();
+
+		
+
+
 	}
 
 	//shopm

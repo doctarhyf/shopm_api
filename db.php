@@ -331,6 +331,7 @@ if( $pds->execute($data)){
 		i.item_name,
 		sum(s.sell_qty) as sell_qty, 
 		sell_item_cur_price,
+		sum(s.sell_qty) * sell_item_cur_price as 'pt',
 		s.sell_date 
 		FROM items i, sells s
 		WHERE i.item_id = s.sell_item_id AND 
@@ -360,6 +361,7 @@ if( $pds->execute($data)){
 		i.item_name,
 		sum(s.sell_qty) as sell_qty, 
 		s.sell_item_cur_price,
+		sum(s.sell_qty) * sell_item_cur_price as 'pt',
 		s.sell_date FROM items i, sells s
 		WHERE i.item_id = s.sell_item_id AND 
 		MONTH(sell_date) = ? AND YEAR(sell_date) = ?

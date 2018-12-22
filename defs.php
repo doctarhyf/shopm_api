@@ -2,6 +2,11 @@
 define('DB_HOST', 'localhost');
 
 
+//SHOPM
+define('PDF_REPPORT_SELLS_TYPE_DAILLY', 'dailly');
+define('PDF_REPPORT_SELLS_TYPE_MONTHLY', 'monthly');
+define('DIR_REPPORTS', 'rapports');
+
 //OTHER
 define('SECRET_KEY', 'SHOPM');
 define('DIR_QR_ITEMS','qritems');

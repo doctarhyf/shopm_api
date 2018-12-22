@@ -44,6 +44,51 @@ function BasicTable($header, $data)
     }
 }
 
+//SHOPM
+function RepportTable($title, $date, $totItems, $totCash, $header, $data, $isMonthly = false)
+{
+    //repport title
+
+    $this->Cell(190,7,'Titre : ' . $title,0);
+    $this->Ln();
+    $this->Cell(190,7,'Date : ' . $date,0);
+    $this->Ln();
+    $this->Cell(190,7,'Total Articles vendu : ' . $totItems,0);
+    $this->Ln();
+    $this->Cell(190,7,'Total Revenu : ' . $totCash,0);
+    $this->Ln();
+    if($isMonthly){
+        $this->Cell(190,7,'Dime : ' . $totCash * .1,0);
+        $this->Ln();
+    }
+    $this->Ln();
+    // Header
+    $cellw = array(76,38,38,38);
+    $i = 0;
+    foreach($header as $col){
+        
+        $this->Cell($cellw[$i],7,$col,1);
+        
+
+        $i ++;
+    }
+    $this->Ln();
+    // Data
+    
+    foreach($data as $row)
+    {
+        $i = 0;
+        foreach($row as $col){
+            $this->Cell($cellw[$i],6,$col,1);
+            $i++;
+        }
+        
+        $this->Ln();
+
+        
+    }
+}
+
 // Better table
 function ImprovedTable($header, $data)
 {
@@ -78,7 +123,7 @@ function FancyTable($header, $data)
     // Header
     $w = array(40, 35, 40, 45);
     for($i=0;$i<count($header);$i++)
-        $this->Cell($w[$i],7,$header[$i],1,0,'C',true);
+    $this->Cell($w[$i],7,$header[$i],1,0,'C',true);
     $this->Ln();
     // Color and font restoration
     $this->SetFillColor(224,235,255);
@@ -100,6 +145,7 @@ function FancyTable($header, $data)
 }
 }
 
+/*
 $pdf = new PDF();
 // Column headings
 $header = array('Country', 'Capital', 'Area (sq km)', 'Pop. (thousands)');
@@ -112,7 +158,7 @@ $pdf->AddPage();
 $pdf->ImprovedTable($header,$data);
 $pdf->AddPage();
 $pdf->FancyTable($header,$data);
-$pdf->Output();
+$pdf->Output();*/
 
 
 

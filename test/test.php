@@ -11,7 +11,7 @@ for($i = 0; $i < 4; $i++){
 }*/
 
 
-require('fpdf181/fpdf.php');
+require('../fpdf181/fpdf.php');
 
 
 
