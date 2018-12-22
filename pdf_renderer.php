@@ -17,6 +17,37 @@ require('fpdf181/fpdf.php');
 
 class PDF extends FPDF
 {
+
+    // Page header
+
+    private $docName;
+
+function Header()
+{
+    // Logo
+    $this->Image('img/logo.jpeg',10,6,30);
+    // Arial bold 15
+    $this->SetFont('Arial','B',15);
+    // Move to the right
+    $this->Cell(80);
+    // Title
+    $this->Cell(30,10,"NOM DE L'ETABLISSEMENT",0,0,'C');
+    // Line break
+    $this->Ln(26);
+}
+
+// Page footer
+function Footer()
+{
+    // Position at 1.5 cm from bottom
+    $this->SetY(-15);
+    // Arial italic 8
+    $this->SetFont('Arial','I',8);
+    // Page number
+    
+    $this->Cell(0,10,'Page '.$this->PageNo().'/{nb} : ' . $this->docName ,0,0,'C');
+}
+
 // Load data
 function LoadData($file)
 {
@@ -48,6 +79,8 @@ function BasicTable($header, $data)
 function RepportTable($title, $date, $totItems, $totCash, $header, $data, $isMonthly = false)
 {
     //repport title
+
+    $this->docName = $title . ' - ' . $date;
 
     $this->Cell(190,7,'Titre : ' . $title,0);
     $this->Ln();
@@ -87,6 +120,8 @@ function RepportTable($title, $date, $totItems, $totCash, $header, $data, $isMon
 
         
     }
+
+    
 }
 
 // Better table

@@ -109,10 +109,19 @@ if(isset($_REQUEST['act'])){
 			mkdir(DIR_REPPORTS, 0777, true);
 		}
 		$pdf = new PDF();
+		$pdf->AliasNbPages();
 		$pdf->SetFont('Arial','',14);
 		$pdf->AddPage();
 		$pdf->RepportTable($title, $date, $totItems, $totCash, $header,$tableData, $isMonthly);
-		$pdf->Output();
+
+		$pdfName = $title . ' ' . $date . ' ' . time();
+		$pdfName = str_replace(" ", "_", $pdfName);
+		$pdfName = str_replace("/", "_", $pdfName);
+
+		$pdf->Output('I',  DIR_REPPORTS . '/' . $pdfName . '.pdf');
+		if(isset($_REQUEST['save'])){
+			$pdf->Output('F',  DIR_REPPORTS . '/' . $pdfName . '.pdf');
+		}
 
 		
 
