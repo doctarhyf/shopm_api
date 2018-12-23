@@ -118,12 +118,17 @@ if(isset($_REQUEST['act'])){
 		$pdfName = str_replace(" ", "_", $pdfName);
 		$pdfName = str_replace("/", "_", $pdfName);
 
+		$success = false;
 		$pdf->Output('I',  DIR_REPPORTS . '/' . $pdfName . '.pdf');
 		if(isset($_REQUEST['save'])){
-			$pdf->Output('F',  DIR_REPPORTS . '/' . $pdfName . '.pdf');
+			$success = $pdf->Output('F',  DIR_REPPORTS . '/' . $pdfName . '.pdf');
 		}
 
-		
+		if($success){
+			echo 'true';
+		}else{
+			echo 'false';
+		}
 
 
 	}
