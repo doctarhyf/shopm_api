@@ -955,6 +955,51 @@ $pds = $pdo->prepare($sql);
 
 		}
 
+		function getTableValue($rowName, $tname, $key, $cond, $val){
+
+
+			$pdo = $this->pdo;
+
+			$data = array();
+
+			$sql = "SELECT $rowName FROM $tname WHERE $key $cond $val";
+
+			//echo $sql;
+
+			$pds = $pdo->prepare($sql);
+
+			$pds->execute($data);
+			$res = $pds->fetchAll(PDO::FETCH_BOTH);
+			
+			if(is_array($res) && count($res) > 0){
+				return $res[0][0];
+			}else{
+				return -1;
+			}
+
+		}
+
+		//shopm
+		function loadItemStockHistory($item_id){
+			
+			$pdo = $this->pdo;
+			$data = array();
+
+			$sql = "SELECT * FROM stock_history WHERE sh_item_id = " . $item_id;
+			//echo $sql;
+
+			$pds = $pdo->prepare($sql);
+			$pds->execute($data);
+			$res = $pds->fetchAll(PDO::FETCH_ASSOC);
+
+			//print_r($res);
+			if(is_array($res) && count($res) > 0){
+				return $res;
+			}else{
+				return false;
+			}
+		}
+
 		//shopm
 	function updItem($item_id, $item_name,$item_price,$item_stock_count, $item_desc){
 
@@ -965,19 +1010,30 @@ $pds = $pdo->prepare($sql);
 		/*$sql = " UPDATE items SET item_name='?', 
 		item_price='?', item_stock_count='?', item_desc='?' where item_id = '?' ";*/
 
+		$rowName = 'item_stock_count';
+		$tname = 'items';
+		$key = 'item_id';
+		$cond = '=';
+		$val = $item_id;
+
+		$oldStockCount = $this->getTableValue($rowName, $tname, $key, $cond, $val);
+
 		$sql = " UPDATE items SET item_name='$item_name', 
 		item_price='$item_price', item_stock_count='$item_stock_count', item_desc='$item_desc', item_last_stock_upd=CURRENT_TIMESTAMP
 		where item_id = '$item_id'  ";
 
-		echo $sql;
-
-
-		//printq($sql,$data);
+		
 
 		$pds = $pdo->prepare($sql);
 
 
 		if( $pds->execute($data)){
+
+			if($oldStockCount != $item_stock_count){
+				$sql = "INSERT INTO `stock_history` (`sh_id`, `sh_item_id`, `sh_old`, `sh_new`, `sh_date`) VALUES (NULL, '" . $item_id . "', '" . $oldStockCount . "', '" . $item_stock_count . "', CURRENT_TIMESTAMP) ";
+				$pds = $pdo->prepare($sql);
+				$pds->execute($data);
+			}
 
 			return 'true';
 

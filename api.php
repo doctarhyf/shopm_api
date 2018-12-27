@@ -33,6 +33,13 @@ if(isset($_REQUEST['act'])){
 	}
 
 	//shopm
+	if($act == 'loadItemStockHistory'){
+
+		$item_id = $_REQUEST["item_id"];
+		echo json_encode(array("data" => $db->loadItemStockHistory($item_id)));
+	}
+
+	//shopm
 	if($act == 'getItemDaillySells'){
 		$d = $_REQUEST["d"];
 		$m = $_REQUEST["m"];
@@ -344,7 +351,14 @@ if(isset($_REQUEST['act'])){
 	}
 	
 	if($act == 'test'){
-		echo 'TEST OK';	
+		
+		$rowName = 'item_stock_count';
+		$tname = 'items';
+		$key = 'item_id';
+		$cond = '=';
+		$val = '3';
+
+		echo $db->getTableValue($rowName, $tname, $key, $cond, $val);
 	}
 
 
