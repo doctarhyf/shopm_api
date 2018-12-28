@@ -33,6 +33,26 @@ if(isset($_REQUEST['act'])){
 	}
 
 	//shopm
+	if($act == 'loadLastRepport'){
+
+		$GLOBALS['lr'] = 'test';
+		$lr = $GLOBALS['lr'];
+		$GLOBALS['lr'] = 'false';
+		//lr last repport
+		/*if(isset($GLOBALS['lr'])){
+		$lr = $GLOBALS['lr'];
+
+		$GLOBALS['lr'] = 'false';
+		}else{
+			echo 'false';
+		}
+		echo $lr;*/
+
+		echo $lr;
+
+	}
+
+	//shopm
 	if($act == 'loadItemStockHistory'){
 
 		$item_id = $_REQUEST["item_id"];

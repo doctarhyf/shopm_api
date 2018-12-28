@@ -985,7 +985,7 @@ $pds = $pdo->prepare($sql);
 			$pdo = $this->pdo;
 			$data = array();
 
-			$sql = "SELECT * FROM stock_history WHERE sh_item_id = " . $item_id;
+			$sql = "SELECT * FROM stock_history WHERE sh_item_id = " . $item_id . " ORDER BY sh_date DESC ";
 			//echo $sql;
 
 			$pds = $pdo->prepare($sql);
