@@ -1,16 +1,13 @@
 <?php
 
+
+for($i = 6; $i < 64; $i++){
+
+    echo "=h" . $i . "/d3<br/>";
+
+}
+
 /*
-for($i = 0; $i < 4; $i++){
-
-    $zero = "";
-    if($i < 10) { $zero = "0"; }
-
-    echo "&lt;item&gt;" . ($i+2016) . "&lt;/item&gt; <br/>";
-
-}*/
-
-
 require('../fpdf181/fpdf.php');
 
 
@@ -116,5 +113,5 @@ $pdf->Output();
 
 
 
-
+*/
 ?>
