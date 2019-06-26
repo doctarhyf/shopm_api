@@ -1,0 +1,151 @@
+<?php
+
+require_once('helper_funcs.php');
+require_once("defs.php");
+require_once("db.php");
+
+$target_dir = "uploads/";
+$target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
+$uploadOk = 1;
+$imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+// Check if image file is a actual image or fake image
+/*
+if(isset($_POST["submit"])) {
+    $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
+    if($check !== false) {
+        echo "File is an image - " . $check["mime"] . ".";
+        $uploadOk = 1;
+    } else {
+        echo "File is not an image.";
+        $uploadOk = 0;
+    }
+}*/
+// Check if file already exists
+/*if (file_exists($target_file)) {
+    echo "Sorry, file already exists.";
+    $uploadOk = 0;
+}*/
+
+
+
+// Check file size
+if ($_FILES["fileToUpload"]["size"] > 500000) {
+    echo "Sorry, your file is too large.";
+    $uploadOk = 0;
+}
+// Allow certain file formats
+
+if($imageFileType != "csv") { // && $imageFileType != "png" && $imageFileType != "jpeg"
+//&& $imageFileType != "gif" ) {
+    echo "Sorry, only CSV"; //, JPEG, PNG & GIF files are allowed.";
+    $uploadOk = 0;
+}
+
+echo 'file type : ' . $imageFileType . '<br/>';
+
+// Check if $uploadOk is set to 0 by an error
+if ($uploadOk == 0) {
+    echo "Sorry, your file was not uploaded.<br/>";
+// if everything is ok, try to upload file
+} else {
+    if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+        echo "The file ". basename( $_FILES["fileToUpload"]["name"]). " has been uploaded.<br/>";
+    } else {
+        echo "Sorry, there was an error uploading your file.";
+    }
+}
+
+autoInsertItems($target_file);
+
+function autoInsertItems($csvPath){
+	
+
+global $db;	
+	
+	echo 'inserting : ' . $csvPath . '<br/>';
+	$data = file_get_contents( $csvPath );
+	//echo '<br/><br/>File Contents : <br/>' . $data;
+	
+	
+	$filename = $csvPath;
+
+// The nested array to hold all the arrays
+$the_big_array = []; 
+
+// Open the file for reading
+if (($h = fopen("{$filename}", "r")) !== FALSE) 
+{
+  // Each line in the file is converted into an individual array that we call $data
+  // The items of the array are comma separated
+  while (($data = fgetcsv($h, 1000, ",")) !== FALSE) 
+  {
+    // Each individual array is being pushed into the nested array
+    $the_big_array[] = $data;		
+  }
+
+  // Close the file
+  fclose($h);
+}
+
+// Display the code in a readable format
+/*echo "<pre>";
+var_dump($the_big_array);
+echo "</pre>";*/
+
+	$numItems = count($the_big_array);
+	
+	$i = 0;	
+	
+	foreach ($the_big_array as $item) {
+		
+		$key = SECRET_KEY;
+		$time = time();
+		$hash = hash_hmac('sha256', $time +  (rand(1, 1000000)), $key);
+
+		//return $hash;
+		
+		$item_unique_name = $hash; // SMOLIMA
+		
+		echo '[hash num :' . $i . ', -> ' . $item_unique_name . '] <br/>';
+    
+    foreach ($item as $k => $v) {
+    // $arr[3] will be updated with each value from $arr...
+    //echo "$k = $v <br/>";
+    
+   $item_name = $item[1];
+	$item_desc = $item[2];
+	$item_price = $item[3];
+	
+	$item_stock_count = $item[6];
+	
+	
+	
+	
+    
+		}
+		
+		echo 'item_name = ' . $item_name . '<br/>';
+	echo 'item_desc = ' . $item_desc . '<br/>';
+	echo 'item_price = ' . $item_price . '<br/>';
+	echo 'item_unique_name = ' . $item_unique_name . '<br/>'; 
+	echo 'item_stock_count = ' . $item_stock_count . '<br/>';
+	
+	$db->addItemToStock($item_name, $item_desc, $item_price, $item_unique_name, $item_stock_count);
+		$i++;
+	}
+	
+	
+	
+	/*$item_name = $_REQUEST['item_name'];
+	$item_desc = $_REQUEST['item_desc'];
+	$item_price = $_REQUEST['item_price'];
+	$item_unique_name = $db->getRandomHash(); 
+	$item_stock_count = $_REQUEST['item_stock_count'];*/
+	
+	
+
+
+	
+}
+
+?>
