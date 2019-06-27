@@ -1,0 +1,9 @@
+<?php
+
+require_once('helper_funcs.php');
+require_once("defs.php");
+require_once("db.php");
+require_once("pdf_renderer.php");
+
+
+?>
