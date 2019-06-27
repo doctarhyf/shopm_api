@@ -8,7 +8,8 @@ require_once("pdf_renderer.php");
 $pdf = new FPDF();
 $pdf->AddPage();
 
-$pdf->SetFont('Arial','B',16);
+$pdf->SetFont('Arial','B',9);
+$pdf->SetTextColor(255,0,0);
 //$pdf->Cell(40,10,'Hello World!');
 
 $pw = 210;
@@ -29,6 +30,10 @@ $xCount = 0;
 $yCount = 0;
 $w = $pw / $numCols;
 $h = $ph / $numRows;
+
+$lblXPos = 0;
+$lblYPos = 0;
+
 foreach($files as $k){
 	
 
@@ -45,7 +50,16 @@ foreach($files as $k){
 	$fname = 'qritems/' . $k;
 	$pdf->Image($fname,$xCount * $w,$yCount * $h, $w, $h);
 	
-	$pdf->Cell($w,10,'Hello World!');
+	$pdf->SetXY(($xCount * $w) + 5, $yCount * $h );
+	
+	
+	$pieces = explode("_", $k);
+	$itemName = $pieces[0]; // piece1
+	
+	
+		
+	
+	$pdf->Cell($w,10,$itemName);
 	
 	$xCount++;
 	
