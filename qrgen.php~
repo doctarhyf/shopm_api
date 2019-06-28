@@ -52,7 +52,12 @@ foreach($files as $k){
 	
 	$pdf->SetXY(($xCount * $w) + 5, $yCount * $h );
 	
-	$itemName = split('_', $k)[0];	
+	
+	$pieces = explode("_", $k);
+	$itemName = $pieces[0]; // piece1
+	
+	
+		
 	
 	$pdf->Cell($w,10,$itemName);
 	
