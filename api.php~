@@ -82,7 +82,7 @@ if(isset($_REQUEST['act'])){
 	if($act == 'genSellsPDFRepport'){
 
 		$itemSellsData;
-		$header = array("Article", "Qte", "PU", "PT");
+		$header = array("Article", "Qte", "PA", "PV", "B", "TOT");
 		$sellsType = $_REQUEST['sellsType'];
 		$title;
 		$date;
@@ -221,8 +221,9 @@ if(isset($_REQUEST['act'])){
 		$exch_rate=$_REQUEST['exch_rate'];
 		$rem_stock = $_REQUEST['rem_stock'];
 		$item_cur_price = $_REQUEST['sell_item_cur_price'];
+		$item_origin_price = 50;
 
-		echo json_encode($db->sellItem($item_id, $item_qty, $exch_rate, $rem_stock, $item_cur_price));
+		echo json_encode($db->sellItem($item_id, $item_qty, $exch_rate, $rem_stock, $item_cur_price, $item_origin_price));
 
 	}
 
@@ -1006,7 +1007,7 @@ if(isset($_REQUEST['act'])){
 		$item_price = $_REQUEST['item_price'];
 		$item_stock_count = $_REQUEST['item_stock_count']; 
 		$item_desc = $_REQUEST['item_desc'];
-		$item_origin_price = -1;
+		$item_origin_price = $_REQUEST['item_origin_price'];
 		//
 
 		echo json_encode($db->updItem($item_id, $item_name,$item_price,$item_stock_count, $item_desc, $item_origin_price));
