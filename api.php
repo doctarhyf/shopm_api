@@ -1006,10 +1006,10 @@ if(isset($_REQUEST['act'])){
 		$item_price = $_REQUEST['item_price'];
 		$item_stock_count = $_REQUEST['item_stock_count']; 
 		$item_desc = $_REQUEST['item_desc'];
-		
+		$item_origin_price = $_REQUEST['item_origin_price'];
 		//
 
-		echo json_encode($db->updItem($item_id, $item_name,$item_price,$item_stock_count, $item_desc));
+		echo json_encode($db->updItem($item_id, $item_name,$item_price,$item_stock_count, $item_desc, $item_origin_price));
 	}
 
 
