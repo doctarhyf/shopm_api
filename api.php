@@ -74,7 +74,7 @@ if(isset($_REQUEST['act'])){
 			
 					
 			
-			$totCash += $sellItem['B'] * $sellItem['sell_qty'];
+			$totCash += $sellItem['B'] ;//* $sellItem['sell_qty'];
 		}
 
 		$res[] = array("tot_qty" => $totQty, "tot_cash" => $totCash);
