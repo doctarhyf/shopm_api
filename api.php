@@ -71,7 +71,10 @@ if(isset($_REQUEST['act'])){
 		$totCash = 0;
 		foreach($res as $sellItem){
 			$totQty += $sellItem['sell_qty'];
-			$totCash += $sellItem['sell_item_cur_price'] * $sellItem['sell_qty'];
+			
+					
+			
+			$totCash += $sellItem['B'] * $sellItem['sell_qty'];
 		}
 
 		$res[] = array("tot_qty" => $totQty, "tot_cash" => $totCash);
@@ -82,7 +85,7 @@ if(isset($_REQUEST['act'])){
 	if($act == 'genSellsPDFRepport'){
 
 		$itemSellsData;
-		$header = array("Article", "Qte", "PA", "PV", "B", "TOT");
+		$header = array("Article", "Qte", "PA", "PV", "B");
 		$sellsType = $_REQUEST['sellsType'];
 		$title;
 		$date;
@@ -117,6 +120,9 @@ if(isset($_REQUEST['act'])){
 		$totItems = 0;
 		$totCash = 0;
 
+		
+		
+
 		foreach($itemSellsData as $itemSells ){
 			$rec = join(";", $itemSells);
 			$recArr = explode(';', $rec);
@@ -125,10 +131,14 @@ if(isset($_REQUEST['act'])){
 			$recArr[0] = ($i + 1) . ". " . $recArr[0];
 			$tableData[] = $recArr;
 			$totItems += $recArr[1];
-			$totCash += $recArr[3];
+			//$totCash += $recArr[4];
 			$i++;
-			//print_r($recArr);
 			
+			//echo $i;
+		}
+		
+		foreach($itemSellsData as $itemSells ){
+			$totCash +=  $itemSells['B'];
 		}
 
 
@@ -140,6 +150,8 @@ if(isset($_REQUEST['act'])){
 		$pdf->SetFont('Arial','',14);
 		$pdf->AddPage();
 		$pdf->RepportTable($title, $date, $totItems, $totCash, $header,$tableData, $isMonthly);
+		
+		//print_r($tableData);
 
 		$pdfName = $title . ' ' . $date . ' ' . time();
 		$pdfName = str_replace(" ", "_", $pdfName);
@@ -174,7 +186,7 @@ if(isset($_REQUEST['act'])){
 		$totCash = 0;
 		foreach($res as $sellItem){
 			$totQty += $sellItem['sell_qty'];
-			$totCash += $sellItem['sell_item_cur_price'] * $sellItem['sell_qty'];
+			$totCash += $sellItem['B'];// * $sellItem['sell_qty'];
 		}
 
 		$res[] = array("tot_qty" => $totQty, "tot_cash" => $totCash);

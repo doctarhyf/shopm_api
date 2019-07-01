@@ -222,7 +222,7 @@ $pds = $pdo->prepare($sql);
 
 		$sql = "INSERT INTO 
 		`sells` (`sell_id`, `sell_invoice_uid`, `sell_item_id`, `sell_qty`, `sell_exch_rate`,`sell_remaining_stock`, `sell_date`, `sell_item_cur_price`, `sell_item_origin_price`) 
-		VALUES (NULL, '$sell_invoice_uid', '$item_id', '$item_qty', '$exch_rate', '$rem_stock', CURRENT_TIMESTAMP, $item_cur_price), '$item_origin_price' ";
+		VALUES (NULL, '$sell_invoice_uid', '$item_id', '$item_qty', '$exch_rate', '$rem_stock', CURRENT_TIMESTAMP, $item_cur_price, '$item_origin_price') ";
 
 		//echo $sql;
 
@@ -327,13 +327,18 @@ if( $pds->execute($data)){
 		$data = array();
 
 
-		$sql = "SELECT
-		i.item_name,
+		$sql = "SELECT 
+		i.item_name, 
 		sum(s.sell_qty) as sell_qty, 
-		sell_item_cur_price,
-		sum(s.sell_qty) * sell_item_cur_price as 'pt',
-		s.sell_date 
-		FROM items i, sells s
+		s.sell_item_origin_price as 'PA',
+		s.sell_item_cur_price as 'PV',
+		((s.sell_item_cur_price - s.sell_item_origin_price) * s.sell_qty) as 'B',
+		s.sell_date as 'sell_date'
+		
+		
+		
+		FROM 
+		items i, sells s 
 		WHERE i.item_id = s.sell_item_id AND 
 		sell_date >= '" . 
 		$y . "-" . $m . "-" . $d . " 00:00:00' AND sell_date < '" . $y . "-" . $m . "-" . ($d+1) . " 00:00:00' 
@@ -358,11 +363,18 @@ if( $pds->execute($data)){
 
 
 		$sql = "SELECT 
-		i.item_name,
+		i.item_name, 
 		sum(s.sell_qty) as sell_qty, 
-		s.sell_item_cur_price,
-		sum(s.sell_qty) * sell_item_cur_price as 'pt',
-		s.sell_date FROM items i, sells s
+		s.sell_item_origin_price as 'PA',
+		s.sell_item_cur_price as 'PV',
+		(s.sell_item_cur_price - s.sell_item_origin_price) as 'B',
+		//((s.sell_item_cur_price - s.sell_item_origin_price) * s.sell_qty) as 'B',
+		s.sell_date as 'sell_date'
+		
+		
+		
+		
+		FROM items i, sells s
 		WHERE i.item_id = s.sell_item_id AND 
 		MONTH(sell_date) = ? AND YEAR(sell_date) = ?
 		GROUP BY i.item_name

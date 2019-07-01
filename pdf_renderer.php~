@@ -31,7 +31,7 @@ function Header()
     // Move to the right
     $this->Cell(80);
     // Title
-    $this->Cell(30,10,"NOM DE L'ETABLISSEMENT",0,0,'C');
+    $this->Cell(30,10,"JENOVIC",0,0,'C');
     // Line break
     $this->Ln(26);
 }
@@ -96,7 +96,7 @@ function RepportTable($title, $date, $totItems, $totCash, $header, $data, $isMon
     }
     $this->Ln();
     // Header
-    $cellw = array(76,38,38,38);
+    $cellw = array(63.33,31.66,31.66,31.66);
     $i = 0;
     foreach($header as $col){
         
@@ -110,6 +110,9 @@ function RepportTable($title, $date, $totItems, $totCash, $header, $data, $isMon
     
     foreach($data as $row)
     {
+    	
+    	
+    		//print_r($data);
         $i = 0;
         foreach($row as $col){
             $this->Cell($cellw[$i],6,$col,1);
