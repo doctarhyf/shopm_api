@@ -85,7 +85,7 @@ if(isset($_REQUEST['act'])){
 	if($act == 'genSellsPDFRepport'){
 
 		$itemSellsData;
-		$header = array("Article", "Qte", "PA", "PV", "B");
+		$header = array("Article", "Qte", "PA(Fc)", "PV", "B", "TOT");
 		$sellsType = $_REQUEST['sellsType'];
 		$title;
 		$date;
@@ -109,7 +109,7 @@ if(isset($_REQUEST['act'])){
 			$y = $_REQUEST["y"];
 
 			$itemSellsData = $db->getItemMonthlySells($y, $m);
-			$title = "Rapport Mentuel";
+			$title = "Rapport Mensuel";
 			$date =  $m . '/' . $y;
 			$isMonthly = true;
 
@@ -129,6 +129,9 @@ if(isset($_REQUEST['act'])){
 			//array_unshift($recArr, ($i + 1));
 			array_pop($recArr);
 			$recArr[0] = ($i + 1) . ". " . $recArr[0];
+			
+			$recArr[] = $recArr[1] * $recArr[3];			
+			
 			$tableData[] = $recArr;
 			$totItems += $recArr[1];
 			//$totCash += $recArr[4];
@@ -137,9 +140,27 @@ if(isset($_REQUEST['act'])){
 			//echo $i;
 		}
 		
+		//print_r($tableData);
+		
+		$totVendu = 0;
+		//$itemSellsDataNew = array();		
+		
 		foreach($itemSellsData as $itemSells ){
 			$totCash +=  $itemSells['B'];
+			$itemTotVendu = $itemSells['PV'] * $itemSells['sell_qty'];
+			
+			$totVendu += $itemTotVendu;
+			
+			$nItemSells = $itemSells;
+			$nItemSells['tot_vendu'] = $itemTotVendu;
+			//$itemSellsDataNew[] = $nItemSells;
+			
 		}
+		
+		
+		
+		
+		
 
 
 		if(!file_exists(DIR_REPPORTS)){
@@ -147,9 +168,9 @@ if(isset($_REQUEST['act'])){
 		}
 		$pdf = new PDF();
 		$pdf->AliasNbPages();
-		$pdf->SetFont('Arial','',14);
+		$pdf->SetFont('Arial','',12);
 		$pdf->AddPage();
-		$pdf->RepportTable($title, $date, $totItems, $totCash, $header,$tableData, $isMonthly);
+		$pdf->RepportTable($title, $date, $totItems, $totCash, $header,$tableData, $isMonthly, $totVendu);
 		
 		//print_r($tableData);
 

@@ -76,7 +76,7 @@ function BasicTable($header, $data)
 }
 
 //SHOPM
-function RepportTable($title, $date, $totItems, $totCash, $header, $data, $isMonthly = false)
+function RepportTable($title, $date, $totItems, $totCash, $header, $data, $isMonthly = false, $totVendu)
 {
     //repport title
 
@@ -88,15 +88,19 @@ function RepportTable($title, $date, $totItems, $totCash, $header, $data, $isMon
     $this->Ln();
     $this->Cell(190,7,'Total Articles vendu : ' . $totItems,0);
     $this->Ln();
-    $this->Cell(190,7,'Total Revenu : ' . $totCash,0);
+    $this->Cell(190,7,'Total Revenu(Fc) : ' . number_format($totCash) ,0);
     $this->Ln();
+    $this->Cell(190,7,'Total Vendu(Fc) : ' . number_format($totVendu),0);
+    $this->Ln();
+		    
+    
     if($isMonthly){
-        $this->Cell(190,7,'Dime : ' . $totCash * .1,0);
+        $this->Cell(190,7,'Dime : ' . number_format($totCash * .1),0);
         $this->Ln();
     }
     $this->Ln();
     // Header
-    $cellw = array(63.33,31.66,31.66,31.66);
+    $cellw = array(54.28,27.14,27.14,27.14,27.14,27.14);
     $i = 0;
     foreach($header as $col){
         
@@ -114,10 +118,28 @@ function RepportTable($title, $date, $totItems, $totCash, $header, $data, $isMon
     	
     		//print_r($data);
         $i = 0;
+        $len = 22;
+        
+			$input = $row[0];
+$str = $input;
+if( strlen( $input) > $len) {
+    $str = explode( "\n", wordwrap( $input, $len));
+    $str = $str[0] . '...';
+}
+
+$row[0] = $str;      
+        
         foreach($row as $col){
+        	
+				if($i == 2 || $i == 3 || $i == 4 || $i == 5  ){
+					$col = number_format($col) ;			
+				}        	
+        	
             $this->Cell($cellw[$i],6,$col,1);
             $i++;
         }
+        
+        //print_r($row);
         
         $this->Ln();
 
